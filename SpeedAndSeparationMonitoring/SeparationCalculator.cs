@@ -51,8 +51,10 @@ namespace SpeedAndSeparationMonitoring
 			double reactionDistance = robotVelocity * reactionTimeRobot;
 			double stoppingDistance = robotVelocity * stoppingTimeRobot;
 
-			return humanDistance + reactionDistance + stoppingDistance +
+			double distance = humanDistance + reactionDistance + stoppingDistance +
 				intrusionDistance + uncertaintyHuman + uncertaintyRobot;
+
+			return (distance > 0.0) ? distance : 0.0;
 		}
 
 		private static void CheckParameters(double reactionTimeRobot, double stoppingTimeRobot, double intrusionDistance, double uncertaintyHuman, double uncertaintyRobot)

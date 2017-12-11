@@ -23,9 +23,7 @@ namespace SpeedAndSeparationMonitoringTest
 		[TestMethod]
 		public void TestDefaultValues()
 		{
-			double expected = humanSpeed * (reactionTime + stoppingTime)
-				+ robotSpeed * (reactionTime + stoppingTime)
-				+ intrustionDistance + uncertaintyHuman + uncertaintyRobot;
+			double expected = 1140.04;
 
 			SeparationCalculator sc = GetDefaultSC();
 			double actual = sc.GetSeparationDistance(humanSpeed, robotSpeed);
@@ -38,9 +36,7 @@ namespace SpeedAndSeparationMonitoringTest
 		{
 			double negativeSpeed = humanSpeed * -1;
 
-			double expected = negativeSpeed * (reactionTime + stoppingTime)
-				+ robotSpeed * (reactionTime + stoppingTime)
-				+ intrustionDistance + uncertaintyHuman + uncertaintyRobot;
+			double expected = 0.0;
 
 			SeparationCalculator sc = GetDefaultSC();
 			double actual = sc.GetSeparationDistance(negativeSpeed, robotSpeed);

@@ -15,7 +15,7 @@ namespace SpeedAndSeparationMonitoring
 
 	public class SpeedCalculator
 	{
-		private readonly Dictionary<BodyPart, int> allowedPressureDict = new Dictionary<BodyPart, int>
+		private static readonly Dictionary<BodyPart, int> allowedPressureDict = new Dictionary<BodyPart, int>
 		{
 			[BodyPart.Skull] = 110,
 			[BodyPart.Face] = 110,
@@ -31,7 +31,7 @@ namespace SpeedAndSeparationMonitoring
 			[BodyPart.LowerLegs] = 210
 		};
 
-		private readonly Dictionary<BodyPart, int> springConstantDict = new Dictionary<BodyPart, int>
+		private static readonly Dictionary<BodyPart, int> springConstantDict = new Dictionary<BodyPart, int>
 		{
 			[BodyPart.Skull] = 150,
 			[BodyPart.Face] = 75,
@@ -47,7 +47,7 @@ namespace SpeedAndSeparationMonitoring
 			[BodyPart.LowerLegs] = 60
 		};
 
-		private readonly Dictionary<BodyPart, double> bodyPartMassDict = new Dictionary<BodyPart, double>
+		private static readonly Dictionary<BodyPart, double> bodyPartMassDict = new Dictionary<BodyPart, double>
 		{
 			[BodyPart.Skull] = 4.4,
 			[BodyPart.Face] = 4.4,
@@ -79,10 +79,10 @@ namespace SpeedAndSeparationMonitoring
 		/// <summary>
 		/// Calculates the allowed velocity of the robot in direction of the human
 		/// </summary>
-		/// <param name="bodyPart"> Body part which is closest to the robot moving part </param>
+		/// <param name="bodyPart"> Human body part which is closest to the robot moving part </param>
 		/// <param name="humanVelocity"> Speed of the human in direction of the robot [mm/s] </param>
 		/// <param name="contactArea"> Area of potential contact between a human and the robot [cm^2] </param>
-		/// <returns></returns>
+		/// <returns> Allowed robot velocity [mm/s] </returns>
 		public double GetAllowedVelocity(BodyPart bodyPart, double humanVelocity, double contactArea)
 		{
 			double allowedPressure = allowedPressureDict[bodyPart];
@@ -94,7 +94,9 @@ namespace SpeedAndSeparationMonitoring
 			double relativeVelocity = 1000 * (transientMultiplier * allowedPressure * contactArea) /
 				Math.Sqrt(reducedMass * springConstant * 1000); // 1000 = 1/(10^-3)
 
-			return relativeVelocity - humanVelocity;
+			double absoluteVelocity = relativeVelocity - humanVelocity;
+
+			return (absoluteVelocity > 0.0) ? absoluteVelocity : 0.0;
 		}
 
 		/// <summary>

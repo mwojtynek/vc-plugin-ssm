@@ -13,6 +13,9 @@ namespace SpeedAndSeparationMonitoring
 	public enum BodyPart { Skull, Face, Neck, Back, Chest, Abdomen,
 		Pelvis, UpperArms, LowerArms, Hands, UpperLegs, LowerLegs };
 
+	/// <summary>
+	/// Calculator for speed limits during transient contact between human and robot
+	/// </summary>
 	public class SpeedCalculator
 	{
 		private static readonly Dictionary<BodyPart, int> allowedPressureDict = new Dictionary<BodyPart, int>
@@ -67,13 +70,13 @@ namespace SpeedAndSeparationMonitoring
 		private double effectiveRobotMass;
 
 		/// <summary>
-		/// 
+		/// Constructor
 		/// </summary>
 		/// <param name="robotMass"> Total mass of the moving parts of the robot [kg] </param>
-		/// <param name="payLoadMass"> Mass of the paylad (including tools) [kg] </param>
-		public SpeedCalculator(double robotMass, double payLoadMass)
+		/// <param name="payloadMass"> Mass of the paylad (including tools) [kg] </param>
+		public SpeedCalculator(double robotMass, double payloadMass)
 		{
-			this.effectiveRobotMass = GetEffectiveRobotMass(robotMass, payLoadMass);
+			this.effectiveRobotMass = GetEffectiveRobotMass(robotMass, payloadMass);
 		}
 
 		/// <summary>
@@ -93,7 +96,7 @@ namespace SpeedAndSeparationMonitoring
 
 			double relativeVelocity = 1000 * (transientMultiplier * allowedPressure * contactArea) /
 				Math.Sqrt(reducedMass * springConstant * 1000); // 1000 = 1/(10^-3)
-
+			
 			double absoluteVelocity = relativeVelocity - humanVelocity;
 
 			return (absoluteVelocity > 0.0) ? absoluteVelocity : 0.0;

@@ -7,32 +7,49 @@ namespace SpeedAndSeparationMonitoringTest
 	[TestClass]
 	public class SpeedTest
 	{
-		private const double robotMass = 160;
-		private const double payLoadMass = 4.5;
-		private SpeedCalculator sc;
+		private const string ERROR_MESSAGE = "Velocity not calculated correctly";
 
-		[TestInitialize]
-		public void Init()
-		{
-			this.sc = new SpeedCalculator(robotMass, payLoadMass);
-		}
+		// Default robot and payload mass
+		private const double ROBOT_MASS = 160;
+		private const double PAYLOAD_MASS = 4.5;
+
+		// Default speed calculator
+		private readonly SpeedCalculator SC = new SpeedCalculator(ROBOT_MASS, PAYLOAD_MASS);
 
 		[TestMethod]
 		public void TestHand()
 		{
 			double expected = 197.69;
-			double actual = sc.GetAllowedVelocity(BodyPart.Hands, 1600, 1);
+			double actual = SC.GetAllowedVelocity(BodyPart.Hands, 1600, 1);
 
-			Assert.AreEqual(expected, actual, 0.01, "Velocity not calculated correctly");
+			Assert.AreEqual(expected, actual, 0.01, ERROR_MESSAGE);
 		}
 
 		[TestMethod]
 		public void TestFace()
 		{
 			double expected = 0.0;
-			double actual = sc.GetAllowedVelocity(BodyPart.Face, 1600, 1);
+			double actual = SC.GetAllowedVelocity(BodyPart.Face, 1600, 1);
 
-			Assert.AreEqual(expected, actual, "Velocity not calculated correctly!");
+			Assert.AreEqual(expected, actual, 0.01, ERROR_MESSAGE);
+		}
+
+		[TestMethod]
+		public void TestZeroHumanSpeed()
+		{
+			double expected = 291.32;
+			double actual = SC.GetAllowedVelocity(BodyPart.Chest, 0, 1);
+
+			Assert.AreEqual(expected, actual, 0.01, ERROR_MESSAGE);
+		}
+
+		[TestMethod]
+		public void TestNegativeHumanSpeed()
+		{
+			double expected = 3397.69;
+			double actual = SC.GetAllowedVelocity(BodyPart.Hands, -1600, 1);
+
+			Assert.AreEqual(expected, actual, 0.01, ERROR_MESSAGE);
 		}
 	}
 }

@@ -11,8 +11,6 @@ namespace SpeedAndSeparationMonitoring
 	/// </summary>
 	public class SeparationCalculator
 	{
-		private const string PARAMETER_ERROR = "All parameters have to be positive values";
-
 		private double reactionTimeRobot;
 		private double stoppingTimeRobot;
 		private double intrusionDistance;
@@ -30,8 +28,6 @@ namespace SpeedAndSeparationMonitoring
 		public SeparationCalculator(double reactionTimeRobot, double stoppingTimeRobot,
 			double intrusionDistance, double uncertaintyHuman, double uncertaintyRobot)
 		{
-			CheckParameters(reactionTimeRobot, stoppingTimeRobot, intrusionDistance, uncertaintyHuman, uncertaintyRobot);
-
 			this.reactionTimeRobot = reactionTimeRobot;
 			this.stoppingTimeRobot = stoppingTimeRobot;
 			this.intrusionDistance = intrusionDistance;
@@ -55,15 +51,6 @@ namespace SpeedAndSeparationMonitoring
 				intrusionDistance + uncertaintyHuman + uncertaintyRobot;
 
 			return (distance > 0.0) ? distance : 0.0;
-		}
-
-		private static void CheckParameters(double reactionTimeRobot, double stoppingTimeRobot, double intrusionDistance, double uncertaintyHuman, double uncertaintyRobot)
-		{
-			if (reactionTimeRobot < 0 || stoppingTimeRobot < 0 || intrusionDistance < 0
-				|| uncertaintyHuman < 0 || uncertaintyRobot < 0)
-			{
-				throw new ArgumentException(PARAMETER_ERROR);
-			}
 		}
 	}
 }

@@ -97,7 +97,7 @@ namespace SpeedAndSeparationMonitoring
 			double relativeVelocity = 1000 * (transientMultiplier * allowedPressure * contactArea) /
 				Math.Sqrt(reducedMass * springConstant * 1000); // 1000 = 1/(10^-3)
 			
-			double absoluteVelocity = relativeVelocity - humanVelocity;
+			double absoluteVelocity = relativeVelocity - humanVelocity*0.25;
 
 			return (absoluteVelocity > 0.0) ? absoluteVelocity : 0.0;
 		}
